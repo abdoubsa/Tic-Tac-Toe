@@ -1,8 +1,14 @@
+const http = require("http")
+  .createServer()
+  .listen(8080, console.log("listening on port 8080"));
+const server = require("websocket").server;
 const path = require("path");
 const fs = require("fs");
+
 var clients = {};
 var games = {};
-var moveNumber = 0;
+const CROSS_SYMBOL = "x";
+const CIRCLE_SYMBOL = "o";
 const logFile = path.resolve(__dirname, "game-events.log");
 const logStream = fs.createWriteStream(logFile, { flags: "a" });
 const WIN_STATES = [
@@ -16,10 +22,6 @@ const WIN_STATES = [
   [2, 4, 6],
 ];
 
-const http = require("http")
-  .createServer()
-  .listen(8080, console.log("listening on port 8080"));
-const server = require("websocket").server;
 const socket = new server({ httpServer: http });
 socket.on("request", (req) => {
   const conn = req.accept(null, req.origin);
@@ -58,6 +60,7 @@ function sendAvailGames() {
 
 function onMessage(msg) {
   const data = JSON.parse(msg.utf8Data);
+  let player = {};
   switch (data.tag) {
     case "create":
       const gameID =
@@ -65,9 +68,9 @@ function onMessage(msg) {
         Math.round(Math.random() * 100) +
         Math.round(Math.random() * 100);
       const board = ["", "", "", "", "", "", "", "", ""];
-      var player = {
+      player = {
         clientID: data.clientID,
-        symbol: "x",
+        symbol: CROSS_SYMBOL,
         isTurn: true,
       };
       const players = Array(player);
@@ -75,13 +78,14 @@ function onMessage(msg) {
       games[gameID] = {
         board: board,
         players: players,
+        board: board,
       };
-      clients[data.clientID].conn.send(
-        JSON.stringify({
-          tag: "created",
-          gameID: gameID,
-        })
-      );
+
+      const payLoad = {
+        tag: "created",
+        game: gameID,
+      };
+      clients[data.clientID].conn.send(JSON.stringify(payLoad));
       sendAvailGames();
       break;
     case "join":

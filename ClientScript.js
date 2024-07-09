@@ -28,9 +28,6 @@ connect.addEventListener("click", (src) => {
   socket.onmessage = onMessage;
   src.target.disabled = true;
 });
-create.addEventListener("click", () => {
-  console.log("i have hit the create button");
-});
 
 function onMessage(msg) {
   const data = JSON.parse(msg.data);
@@ -65,7 +62,6 @@ function onMessage(msg) {
       gameID = data.gameID;
       create.disabled = true;
       join.disabled = true;
-      // console.log(gameID);
       break;
     case "joined":
       document.querySelector(".game--container").style.display = "grid";
@@ -97,6 +93,7 @@ function onMessage(msg) {
       break;
     case "gameDraw":
       alert("The game is a draw");
+      break;
   }
 }
 
