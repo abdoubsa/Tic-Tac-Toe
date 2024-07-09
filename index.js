@@ -1,5 +1,15 @@
 var clients = {};
 var games = {};
+const WIN_STATES = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+];
 
 const http = require("http")
   .createServer()
@@ -86,5 +96,72 @@ function onMessage(msg) {
           })
         );
       });
+      updateBoard(data.gameID);
+      break;
+    case "moveMade":
+      games[data.gameID].board = data.board;
+      const isWinner = winState(data.gameID);
+      const isDraw = drawState(data.gameID);
+      if (isWinner) {
+        games[data.gameID].players.forEach((player) => {
+          clients[player.clientID].conn.send(
+            JSON.stringify({
+              tag: "winner",
+              winner: player.symbol,
+            })
+          );
+        });
+      } else if (isDraw) {
+        games[data.gameID].players.forEach((player) => {
+          clients[player.clientID].conn.send(
+            JSON.stringify({
+              tag: "gameDraw",
+            })
+          );
+        });
+      } else {
+        games[data.gameID].players.forEach((player) => {
+          player.isTurn = !player.isTurn;
+        });
+        updateBoard(data.gameID);
+      }
+      break;
   }
+}
+function updateBoard(gameID) {
+  games[gameID].players.forEach((player) => {
+    clients[player.clientID].conn.send(
+      JSON.stringify({
+        tag: "updateBoard",
+        isTurn: player.isTurn,
+        board: games[gameID].board,
+      })
+    );
+  });
+}
+
+function winState(gameID) {
+  return WIN_STATES.some((row) => {
+    return (
+      row.every((cell) => {
+        return games[gameID].board[cell] == "x";
+      }) ||
+      row.every((cell) => {
+        return games[gameID].board[cell] == "0";
+      })
+    );
+  });
+}
+
+function drawState(gameID) {
+  return WIN_STATES.every((row) => {
+    return (
+      row.some((cell) => {
+        return games[gameID].board[cell] == "x";
+      }) ||
+      row.some((cell) => {
+        return games[gameID].board[cell] == "o";
+      })
+    );
+  });
 }

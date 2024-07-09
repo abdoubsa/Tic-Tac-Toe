@@ -15,6 +15,7 @@ join.addEventListener("click", () => {
     })
   );
 });
+const cells = document.querySelectorAll(".cell");
 const board = document.querySelector(".game--container");
 const list = document.querySelector("ul");
 const clientText = document.getElementById("clientText");
@@ -69,7 +70,70 @@ function onMessage(msg) {
       } else {
         board.classList.add("circle");
       }
+      break;
+    case "updateBoard":
+      cells.forEach((cell) => {
+        if (cell.classList.contains("cross")) {
+          cell.classList.remove("cross");
+        } else if (cell.classList.contains("circle")) {
+          cell.classList.remove("circle");
+        }
+      });
+      for (i = 0; i < 9; i++) {
+        if (data.board[i] == "x") cells[i].classList.add("cross");
+        else if (data.board[i] == "o") cells[i].classList.add("circle");
+      }
+      if (data.isTurn) {
+        makeMove();
+      }
+      break;
+    case "winner":
+      alert(`The winner is ${data.winner}`);
+      break;
+    case "gameDraw":
+      alert("The game is a draw");
   }
+}
+
+function makeMove() {
+  cells.forEach((cell) => {
+    if (
+      !cell.classList.contains("cross") &&
+      !cell.classList.contains("circle")
+    ) {
+      cell.addEventListener("click", cellClicked);
+    }
+  });
+}
+function cellClicked(src) {
+  let icon;
+  if (symbol == "x") {
+    icon = "cross";
+  } else {
+    icon = "circle";
+  }
+  src.target.classList.add(icon);
+  const board = [];
+  for (i = 0; i < 9; i++) {
+    if (cells[i].classList.contains("circle")) {
+      board[i] = "o";
+    } else if (cells[i].classList.contains("cross")) {
+      board[i] = "x";
+    } else {
+      board[i] = "";
+    }
+  }
+  cells.forEach((cell) => {
+    cell.removeEventListener("click", cellClicked);
+  });
+  socket.send(
+    JSON.stringify({
+      tag: "moveMade",
+      board: board,
+      clientID: clientID,
+      gameID: gameID,
+    })
+  );
 }
 
 create.addEventListener("click", () => {
