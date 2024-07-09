@@ -15,3 +15,56 @@
 2024-07-09T11:31:38.909Z - a player has made a move in [object Object]
 2024-07-09T11:31:41.917Z - a player has made a move in [object Object]
 2024-07-09T11:31:43.565Z - a player has made a move in [object Object]
+2024-07-09T13:37:58.198Z - a player has made a move in [object Object]
+2024-07-09T13:38:01.390Z - a player has made a move in [object Object]
+2024-07-09T13:38:02.814Z - a player has made a move in [object Object]
+2024-07-09T13:38:04.406Z - a player has made a move in [object Object]
+2024-07-09T13:38:07.078Z - a player has made a move in [object Object]
+2024-07-09T14:03:12.920Z - a player has made a move in undefined
+2024-07-09T14:03:35.440Z - a player has made a move in undefined
+2024-07-09T14:03:36.256Z - a player has made a move in undefined
+2024-07-09T14:04:03.144Z - a player has made a move in undefined
+2024-07-09T14:04:06.448Z - a player has made a move in undefined
+2024-07-09T14:04:36.824Z - a player has made a move in [object Object]
+2024-07-09T14:04:38.520Z - a player has made a move in [object Object]
+2024-07-09T14:04:39.824Z - a player has made a move in [object Object]
+2024-07-09T14:04:43.232Z - a player has made a move in [object Object]
+2024-07-09T14:29:19.539Z - game borad is x,,,,,,,,
+2024-07-09T14:30:38.946Z - game borad is x,,,,,,,,
+2024-07-09T14:31:08.338Z - game borad is x,,,,,,,,
+2024-07-09T14:31:57.306Z - game borad is x,,,,,,,,
+2024-07-09T14:32:37.099Z - game borad is x,,,,,,,,
+2024-07-09T14:33:02.523Z - game borad is x,,,,,,,,
+2024-07-09T14:33:02.524Z - isWinner = false symbol= x
+2024-07-09T14:33:07.139Z - game borad is x,o,,,,,,,
+2024-07-09T14:33:07.139Z - isWinner = false symbol= o
+2024-07-09T14:33:17.179Z - game borad is x,o,,,x,,,,
+2024-07-09T14:33:17.179Z - isWinner = false symbol= x
+2024-07-09T14:33:18.490Z - game borad is x,o,,,x,o,,,
+2024-07-09T14:33:18.491Z - isWinner = false symbol= o
+2024-07-09T14:33:20.082Z - game borad is x,o,,,x,o,,x,
+2024-07-09T14:33:20.083Z - isWinner = false symbol= x
+2024-07-09T14:33:23.435Z - game borad is x,o,o,,x,o,,x,
+2024-07-09T14:33:23.435Z - isWinner = false symbol= o
+2024-07-09T14:33:26.474Z - game borad is x,o,o,,x,o,x,x,
+2024-07-09T14:33:26.475Z - isWinner = false symbol= x
+2024-07-09T14:33:27.883Z - game borad is x,o,o,,x,o,x,x,o
+2024-07-09T14:33:27.883Z - isWinner = true symbol= o
+2024-07-09T14:36:09.507Z - game borad is x,,,,,,,,
+2024-07-09T14:36:09.509Z - isWinner = false symbol= x
+2024-07-09T14:36:10.699Z - game borad is x,o,,,,,,,
+2024-07-09T14:36:10.699Z - isWinner = false symbol= o
+2024-07-09T14:36:11.883Z - game borad is x,o,,,x,,,,
+2024-07-09T14:36:11.883Z - isWinner = false symbol= x
+2024-07-09T14:36:13.188Z - game borad is x,o,,,x,o,,,
+2024-07-09T14:36:13.188Z - isWinner = false symbol= o
+2024-07-09T14:36:14.499Z - game borad is x,o,,,x,o,,x,
+2024-07-09T14:36:14.499Z - isWinner = false symbol= x
+2024-07-09T14:36:16.099Z - game borad is x,o,o,,x,o,,x,
+2024-07-09T14:36:16.099Z - isWinner = false symbol= o
+2024-07-09T14:36:20.987Z - game borad is x,o,o,,x,o,x,x,
+2024-07-09T14:36:20.987Z - isWinner = false symbol= x
+2024-07-09T14:36:23.915Z - game borad is x,o,o,o,x,o,x,x,
+2024-07-09T14:36:23.915Z - isWinner = false symbol= o
+2024-07-09T14:36:25.883Z - game borad is x,o,o,o,x,o,x,x,x
+2024-07-09T14:36:25.883Z - isWinner = true symbol= x

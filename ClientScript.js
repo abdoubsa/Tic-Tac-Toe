@@ -135,7 +135,6 @@ function cellClicked(src) {
       board: board,
       clientID: clientID,
       gameID: gameID,
-      clickedCell: clickedCell,
     })
   );
 }

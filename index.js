@@ -78,20 +78,19 @@ function onMessage(msg) {
       games[gameID] = {
         board: board,
         players: players,
-        board: board,
       };
-
-      const payLoad = {
-        tag: "created",
-        game: gameID,
-      };
-      clients[data.clientID].conn.send(JSON.stringify(payLoad));
+      clients[data.clientID].conn.send(
+        JSON.stringify({
+          tag: "created",
+          gameID: gameID,
+        })
+      );
       sendAvailGames();
       break;
     case "join":
       player = {
         clientID: data.clientID,
-        symbol: "o",
+        symbol: CIRCLE_SYMBOL,
         isTurn: false,
       };
       games[data.gameID].players.push(player);
@@ -108,33 +107,62 @@ function onMessage(msg) {
       updateBoard(data.gameID);
       break;
     case "moveMade":
+      console.log("before makeMove" + data.gameID);
       games[data.gameID].board = data.board;
-      logEvent(`a player has made a move in ${data.clickedCell}`);
-      const isWinner = winState(data.gameID);
-      const isDraw = drawState(data.gameID);
+      let currPlayer;
+      let playerSymbol;
+      games[data.gameID].players.forEach((player) => {
+        if (player.isTurn) {
+          currPlayer = player.clientId;
+          playerSymbol = player.symbol;
+        }
+      });
+      let isWinner = false;
+      logEvent(`game borad is ${data.board}`);
+
+      isWinner = WIN_STATES.some((row) => {
+        return row.every((cell) => {
+          return games[data.gameID].board[cell] == playerSymbol ? true : false;
+        });
+      });
+      logEvent(`isWinner = ${isWinner} symbol= ${playerSymbol}`);
+
       if (isWinner) {
         games[data.gameID].players.forEach((player) => {
           clients[player.clientID].conn.send(
             JSON.stringify({
               tag: "winner",
-              winner: player.symbol,
-            })
-          );
-        });
-      } else if (isDraw) {
-        games[data.gameID].players.forEach((player) => {
-          clients[player.clientID].conn.send(
-            JSON.stringify({
-              tag: "gameDraw",
+              winner: playerSymbol,
             })
           );
         });
       } else {
-        games[data.gameID].players.forEach((player) => {
-          player.isTurn = !player.isTurn;
+        const isDraw = WIN_STATES.every((state) => {
+          return (
+            state.some((index) => {
+              return games[data.gameID].board[index] == "x";
+            }) &&
+            state.some((index) => {
+              return games[data.gameID].board[index] == "o";
+            })
+          );
         });
-        updateBoard(data.gameID);
-      }
+        if (isDraw) {
+          games[data.gameID].players.forEach((player) => {
+            clients[player.clientID].conn.send(
+              JSON.stringify({
+                tag: "gameDraw",
+              })
+            );
+          });
+          break;
+        }
+        // before it  was " else if (isDraw)"
+      } // else
+      games[data.gameID].players.forEach((player) => {
+        player.isTurn = !player.isTurn;
+      });
+      updateBoard(data.gameID);
       break;
   }
 }
@@ -145,32 +173,6 @@ function updateBoard(gameID) {
         tag: "updateBoard",
         isTurn: player.isTurn,
         board: games[gameID].board,
-      })
-    );
-  });
-}
-
-function winState(gameID) {
-  return WIN_STATES.some((row) => {
-    return (
-      row.every((cell) => {
-        return games[gameID].board[cell] == "x";
-      }) ||
-      row.every((cell) => {
-        return games[gameID].board[cell] == "0";
-      })
-    );
-  });
-}
-
-function drawState(gameID) {
-  return WIN_STATES.every((row) => {
-    return (
-      row.some((cell) => {
-        return games[gameID].board[cell] == "x";
-      }) ||
-      row.some((cell) => {
-        return games[gameID].board[cell] == "o";
       })
     );
   });
