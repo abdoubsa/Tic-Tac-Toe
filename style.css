@@ -31,7 +31,7 @@ section {
 }
 
 .game--container {
-  display: grid;
+  display: none;
   grid-template-columns: repeat(3, auto);
   width: auto;
   margin: auto;
