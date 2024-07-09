@@ -2,6 +2,7 @@ var clientID;
 var gameID;
 var socket;
 var symbol;
+var clickedCell;
 const create = document.querySelector(".crtBtn");
 create.disabled = true;
 const join = document.querySelector(".jnBtn");
@@ -15,9 +16,10 @@ join.addEventListener("click", () => {
     })
   );
 });
+
 const cells = document.querySelectorAll(".cell");
 const board = document.querySelector(".game--container");
-const list = document.querySelector("ul");
+const list = document.querySelector("#gamesList");
 const clientText = document.getElementById("clientText");
 const sidebar = document.querySelector(".sidebar");
 const connect = document.querySelector(".cntBtn");
@@ -52,6 +54,9 @@ function onMessage(msg) {
         list.appendChild(li);
         li.addEventListener("click", () => {
           gameID = game;
+
+          // Add the 'clicked' class to the clicked item
+          li.classList.add("clicked");
         });
       });
 
@@ -113,6 +118,7 @@ function cellClicked(src) {
     icon = "circle";
   }
   src.target.classList.add(icon);
+  clickedCell = src;
   const board = [];
   for (i = 0; i < 9; i++) {
     if (cells[i].classList.contains("circle")) {
@@ -132,6 +138,7 @@ function cellClicked(src) {
       board: board,
       clientID: clientID,
       gameID: gameID,
+      clickedCell: clickedCell,
     })
   );
 }

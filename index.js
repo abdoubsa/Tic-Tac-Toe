@@ -1,5 +1,10 @@
+const path = require("path");
+const fs = require("fs");
 var clients = {};
 var games = {};
+var moveNumber = 0;
+const logFile = path.resolve(__dirname, "game-events.log");
+const logStream = fs.createWriteStream(logFile, { flags: "a" });
 const WIN_STATES = [
   [0, 1, 2],
   [3, 4, 5],
@@ -100,6 +105,7 @@ function onMessage(msg) {
       break;
     case "moveMade":
       games[data.gameID].board = data.board;
+      logEvent(`a player has made a move in ${data.clickedCell}`);
       const isWinner = winState(data.gameID);
       const isDraw = drawState(data.gameID);
       if (isWinner) {
@@ -164,4 +170,11 @@ function drawState(gameID) {
       })
     );
   });
+}
+
+function logEvent(event) {
+  const timestamp = new Date().toISOString();
+  const logMessage = `${timestamp} - ${event}\n`;
+  console.log(logMessage); // Log to console
+  logStream.write(logMessage); // Log to file
 }
